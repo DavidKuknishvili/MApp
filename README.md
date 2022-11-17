@@ -1,2 +1,2 @@
-# Navigation Component ReactNative
+# Movie App
 
