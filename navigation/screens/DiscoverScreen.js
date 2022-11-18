@@ -100,7 +100,7 @@ const CategoryData = [
 
 
 export default function DiscoverScreen() {
-    
+
   const [category, setCategory] = useState(0)
   const [getMovies, setMovies] = React.useState([]);
 

@@ -12,9 +12,10 @@ import { movieTrailerId } from '../../Api';
 
 const { width, height } = Dimensions.get('window');
 
-export default function OpenMovie({ route, fromScreen }) {
-  const { item } = route.params;
+export default function OpenMovie({ route }) {
+  const { item, fromScreen  } = route.params;
   // const { fromScreen } = fromScreen
+  console.log(fromScreen,'----')
 
   const [trailer, settrailers] = React.useState([]);
   const [movieid, stemovieid] = React.useState(item.id)
@@ -51,6 +52,7 @@ export default function OpenMovie({ route, fromScreen }) {
         },
       )
   }
+  const navigation = useNavigation(); 
 
   const renderItem = ({item})=>{
     return(
@@ -61,7 +63,6 @@ export default function OpenMovie({ route, fromScreen }) {
  
 
 
-  const navigation = useNavigation(); 
 
 
 
@@ -86,30 +87,6 @@ export default function OpenMovie({ route, fromScreen }) {
 
 
 
-
-  const playBN = ()=>{
-
-    setContent(
-    //   <WebView
-    //     javaScriptEnabled={true}
-    //     allowsFullscreenVideo={true}
-        
-    //     source={{uri: `https://www.youtube.com/embed/${'5lGoQhFb4NM'}?&autoplay=1&mute=0&showinfo=0&controls=1&fullscreen=1`}}
-    // />
-
-
-    <YoutubePlayer
-    height={300}
-    play={playing}
-    forceAndroidAutoplay
-    videoId={"5b22be749251416e1b01d1d9"}
-    // onChangeState={onStateChange}
-    onChangeState={onStateChange}/>
-    
-    
-    )
-    
-  }
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
 
 
@@ -205,7 +182,13 @@ export default function OpenMovie({ route, fromScreen }) {
         </LinearGradient>
         <View style={{ position:'absolute', marginTop:15, marginLeft:15, backgroundColor:'#1A1A1D', width:50, height:50,justifyContent:'center', alignItems:'center' , borderRadius:50}}>
           <TouchableOpacity onPress={()=>{
+
+            if(fromScreen == 'Home'){
               navigation.navigate('Home')
+            }else if (fromScreen == 'Discover'){
+              console.log('hi')
+               navigation.navigate('Discover')
+            }
 
             }}>
             

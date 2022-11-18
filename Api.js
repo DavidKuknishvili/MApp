@@ -1,4 +1,4 @@
-import { API_KEY } from './condig';
+import { API_KEY } from './config';
 const genres = {
   12: 'Adventure',
   14: 'Fantasy',

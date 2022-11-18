@@ -3,6 +3,9 @@ import { NavigationContainer, getFocusedRouteNameFromRoute} from '@react-navigat
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { FirebaseMAuth } from '../firebase-config'
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 
 import LottieView from 'lottie-react-native';
 
@@ -17,12 +20,18 @@ import TicketScreen from './screens/TicketScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import OpenMovie from './screens/OpenMovie';
+
+
+
 //Screen names
 const homeName = "Home";
 const discoverName = "Discover";
 const ticketName = "Ticket";
 const profileName = "Profile";
 const openMovieName = 'OpenMovie'
+const registrationName = 'Registartion'
+const loginName = 'Login'
+const profileLName = 'ProfileL'
 
 const Tab = createBottomTabNavigator();
 
@@ -40,10 +49,13 @@ import SVGTicketAIcon from '../assets/icons/TicketA.js';
 import SVGTicketDIcon from '../assets/icons/TicketD.js';
 import SVGProfileAIcon from '../assets/icons/ProfileA.js';
 import SVGProfileDIcon from '../assets/icons/ProfileD.js';
-
+import Registration from '../navigation/screens/reg and login/Registration'
+import Login from '../navigation/screens/reg and login/Login'
+import ProfileL from './screens/ProfileL';
 
 const HomeStack = createNativeStackNavigator();
 const DiscoverStack = createNativeStackNavigator();
+const ProfileStack = createNativeStackNavigator();
 
 function HomeStackScreen({ navigation, route }) {
   React.useLayoutEffect(() => {
@@ -113,8 +125,129 @@ function DiscoverStackScreen({ navigation, route }) {
 }
 
 
+function ProfileStackScreen({ navigation, route }) {
+
+
+  const [screen, setScreen] = React.useState(
+    <>
+
+    <ProfileStack.Screen
+    name={profileName}
+    component={ProfileScreen}/>   
+    <ProfileStack.Screen
+      name={registrationName}
+      component={Registration}/>
+    <ProfileStack.Screen
+      name={loginName}
+      component={Login}/>  
+    </>
+  )
+
+  const [isStarted, setStarted] = React.useState(false)
+
+
+  // const auth = getAuth();
+
+  React.useEffect(()=>{
+    onAuthStateChanged(FirebaseMAuth, (user) => {
+      if (user) {
+        setScreen(
+          <>
+          <ProfileStack.Screen
+          name={profileLName}
+          component={ProfileL}/>
+ 
+          </> 
+        )
+        // setStarted(true)
+        console.log('daloginebuilia')
+  
+      } else {
+        setScreen(
+          <>
+
+          <ProfileStack.Screen
+          name={profileName}
+          component={ProfileScreen}/>   
+          <ProfileStack.Screen
+            name={registrationName}
+            component={Registration}/>
+          <ProfileStack.Screen
+            name={loginName}
+            component={Login}/>  
+          </>
+        )
+        console.log('araris daloginebuli')
+
+      }
+    });
+
+
+  },[true])
+
+  // onAuthStateChanged(FirebaseMAuth, (user) => {
+  //   if (user) {
+
+  //     setStarted(true)
+
+  //   } else {
+
+  //     setStarted(false)
+  //   }
+  // });
+
+
+
+
+
+
+
+  React.useLayoutEffect(() => {
+    const routeName = getFocusedRouteNameFromRoute(route);
+    console.log(routeName)
+    if (routeName === "Registartion" || routeName === "Login"){
+      console.log(routeName)
+
+      navigation.setOptions({tabBarStyle: {display: 'none'}});
+    }else {
+      navigation.setOptions({tabBarStyle: {height:70,
+        position: 'absolute',
+        backgroundColor: '#1A1A1D',
+        borderTopWidth: 0.25,
+        borderTopColor:'#636363'}});
+    }
+}, [navigation, route]);
+  return (
+    <ProfileStack.Navigator
+      screenOptions={{
+      headerShown: false}}>
+
+      {screen}
+      {/* <ProfileStack.Screen
+          name={profileLName}
+          component={ProfileL}/>
+      <ProfileStack.Screen
+        name={registrationName}
+        component={Registration}/>
+      <ProfileStack.Screen
+        name={loginName}
+        component={Login}/> */}
+      {/* <ProfileStack.Screen
+        name={profileLName}
+        component={ProfileL}/> */}
+
+    </ProfileStack.Navigator>
+  );
+}
+
+
+
+
+// const [getScreecn, setScreen] = React.useState(ProfileScreen)
+
 
 function MainContainer() {
+
     return(
         <SafeAreaProvider style={styles.mainConatiner} >
 
@@ -137,7 +270,7 @@ function MainContainer() {
                             } else if (rn === ticketName) {
                                 iconName = focused ? <SVGTicketAIcon/> : <SVGTicketDIcon/>;
 
-                            } else if (rn === profileName) {
+                            } else if (rn === 'profileStack') {
                                 iconName = focused ? <SVGProfileAIcon/> : <SVGProfileDIcon/>;
                             }
                             // if (focused){
@@ -172,7 +305,7 @@ function MainContainer() {
                 <Tab.Screen name='homeStack' component={HomeStackScreen} />
                 <Tab.Screen name='discoverStack' component={DiscoverStackScreen} />
                 <Tab.Screen name={ticketName} component={TicketScreen} />
-                <Tab.Screen name={profileName} component={ProfileScreen} />
+                <Tab.Screen name='profileStack' component={ProfileStackScreen} />
 
 
                 </Tab.Navigator>
