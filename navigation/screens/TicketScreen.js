@@ -24,14 +24,12 @@ const { width, height } = Dimensions.get("window");
 
 export default function TicketScreen() {
   const [userUID, setUserUID] = React.useState(null);
-  let [firstRequest, setFirstRequest] = React.useState(0);
   onAuthStateChanged(FirebaseMAuth, (user) => {
-    setFirstRequest(firstRequest++);
     if (user) {
       setUserUID(user.uid);
     }
   });
-
+  
   let bookingItemList = [];
 
   const db = getDatabase();
@@ -61,7 +59,7 @@ export default function TicketScreen() {
 
   return (
     <SafeAreaView style={styles.mainConatiner}>
-      {bookingItemList.length === 0 ? (
+      {bookingItemList.length === 0 || userUID === null ? (
         <ScrollView
           refreshControl={
             <RefreshControl

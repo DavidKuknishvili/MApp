@@ -105,11 +105,14 @@ export default function OpenMovie({ route }) {
   const [alreadyBooked, setAlreadyBooked] = React.useState(false);
 
   const bookingHandler = () => {
-    setAlreadyBooked(true);
-    const db = getDatabase();
-    set(sRef(db, "booking/" + `${userUID}/` + `${item.id}`), item)
-      .then(() => {})
-      .catch((error) => {});
+    if (userUID !== null){
+
+      setAlreadyBooked(true);
+      const db = getDatabase();
+      set(sRef(db, "booking/" + `${userUID}/` + `${item.id}`), item)
+        .then(() => {})
+        .catch((error) => {});
+    }
   };
 
   let [firstRequest, setFirstRequest] = React.useState(0);

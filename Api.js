@@ -53,7 +53,6 @@ export const getMovies = async () => {
       vote_count:vote_count
     })
   );
-  // console.log(movies)
 
   return movies;
 };
@@ -61,7 +60,6 @@ export const getMovies = async () => {
 
 export const categoryMovieData = async ( category )=> {
   const CATEGORY_API_URL = 'https://api.themoviedb.org/3/discover/movie?api_key='+ API_KEY + '&with_genres='+category.toString()
-  // console.log('------------------------------------------------------------------------------------',CATEGORY_API_URL)
   const { results } = await fetch(CATEGORY_API_URL).then((x) => x.json());
 
   const movies = results.map(
@@ -85,7 +83,6 @@ export const categoryMovieData = async ( category )=> {
       genres: genre_ids.map((genre) => genres[genre]),
     })
   );
-  // console.log(movies , CATEGORY_API_URL)
   return movies
 
 
@@ -106,7 +103,6 @@ export const movieTrailerId = async (movieid) => {
   );
 
     const ind  = trailers.length - 1
-  // console.log(trailers[2].trailersKey)
   return trailers[ind]
 
 }
