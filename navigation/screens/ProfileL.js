@@ -1,63 +1,133 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { useNavigation } from '@react-navigation/native';
+import { Image, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { useNavigation } from "@react-navigation/native";
 
+import { FirebaseMAuth } from "../../firebase-config";
+import { onAuthStateChanged, updateProfile, signOut } from "firebase/auth";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { FirebaseMAuth } from '../../firebase-config'
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import SVGProfileP from "../../assets/icons/profileP";
+import SVGLogOut from "../../assets/icons/LogOut";
 
+import { Dimensions } from "react-native";
 
+import * as ImagePicker from "expo-image-picker";
 
+const { width, height } = Dimensions.get("window");
 
+export default function ProfileL({ route }) {
+  const { dname } = route;
+  const navigation = useNavigation();
 
+  const [getname, setname] = React.useState(dname);
 
-export default function ProfileL() {
+  const [email, setemail] = React.useState("");
 
-  const navigation = useNavigation(); 
+  const [image, setImage] = React.useState(null);
 
+  const logout = () => {
+    signOut(FirebaseMAuth)
+      .then(() => {
+        navigation.navigate("Profile");
+      })
+      .catch((error) => {});
+  };
 
-
-  const [id, setid] = React.useState('')
-
-  React.useEffect(()=>{
-    onAuthStateChanged(FirebaseMAuth, (user) => {
-      if (user) {
-        console.log(user.uid)
-        setid(user.email)
-
-  
-      } else {
-        console.log('ar aris avtorizebuli')
-        setid('')
+  onAuthStateChanged(FirebaseMAuth, (user) => {
+    if (user) {
+      setname(user.displayName);
+      setemail(user.email);
+      if (user.photoURL != null) {
+        setImage(user.photoURL);
       }
+    } else {
+    }
+  });
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
     });
 
+    if (!result.canceled) {
+      updateProfile(FirebaseMAuth.currentUser, {
+        photoURL: result.uri,
+      })
+        .then(() => {
+          setImage(result.uri);
+        })
+        .catch((error) => {});
+    }
+  };
 
-
-  },[id])
-  
-  const logout = () => {
-    
-    signOut(FirebaseMAuth).then(() => {
-        navigation.navigate('Profile')
-      }).catch((error) => {
-        // An error happened.
-      });
-  }
   return (
-    <View>
-      <Text>{id}</Text>
-      <TouchableOpacity onPress={()=>{logout()}}>
+    <View style={styles.mainConatiner}>
+      <View style={styles.infocontainer}>
+        <TouchableOpacity onPress={pickImage} style={styles.profileBorder}>
+          {image === null ? (
+            <SVGProfileP />
+          ) : (
+            <Image
+              style={{ width: 130, height: 130, borderRadius: 555 }}
+              source={{ uri: image }}
+            />
+          )}
+        </TouchableOpacity>
+        <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>
+          {getname}
+        </Text>
+        <Text style={{ color: "#ffffff60" }}>{email}</Text>
+      </View>
 
-        <Text style={{  color:'#000', fontSize:16}}>logout</Text>
-
-
+      <TouchableOpacity
+        style={styles.logout}
+        onPress={() => {
+          logout();
+        }}
+      >
+        <SVGLogOut />
+        <Text style={{ marginLeft: 20, color: "#fff", fontSize: 16 }}>
+          LogOut
+        </Text>
       </TouchableOpacity>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-
-})
+  mainConatiner: {
+    flex: 1,
+    backgroundColor: "#1A1A1D",
+  },
+  profileBorder: {
+    borderRadius: 150,
+    borderColor: "#DB434650",
+    borderWidth: 2,
+    borderStyle: "dashed",
+    width: 150,
+    height: 150,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  infocontainer: {
+    width: width,
+    display: "flex",
+    textAlign: "center",
+    alignItems: "center",
+    marginTop: height / 10,
+    marginBottom: height / 4,
+  },
+  logout: {
+    display: "flex",
+    flexDirection: "row",
+    borderTopWidth: 1,
+    borderTopColor: "#ffffff20",
+    alignItems: "center",
+    margin: 25,
+  },
+});

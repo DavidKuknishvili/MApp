@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-community/image-picker-ios": "^1.0.1",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/bottom-tabs": "^6.3.2",
     "@react-navigation/native": "^6.0.11",
@@ -31,7 +32,8 @@
     "react-native-svg-transformer": "^1.0.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-webview": "^11.23.0",
-    "react-native-youtube-iframe": "^2.2.2"
+    "react-native-youtube-iframe": "^2.2.2",
+    "expo-image-picker": "~13.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

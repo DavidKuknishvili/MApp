@@ -156,10 +156,7 @@ export default function swipe( ) {
             extrapolate: 'clamp',
 
           });
-          // const [getTitleColor, setTitleColor] = React.useState('#FFF')
 
-          // if()
-          // console.log(item)
           return (
             
             <View style={{ width: ITEM_SIZE, height:height-100 }}>
@@ -179,7 +176,6 @@ export default function swipe( ) {
               <View style={{ alignItems:'center',  backgroundColor:"#1A1A1D", padding:12, borderRadius:30}}>
                 <View
                 
-                //  onPress={() => navigation.navigate('Ticket')}
                  >
                   <Image
                     source={{ uri: item.image }}

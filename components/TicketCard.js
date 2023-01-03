@@ -5,23 +5,22 @@ import { useNavigation } from '@react-navigation/native';
 const { width, height } = Dimensions.get('window');
 
 
-export default function Cards({ item }) {
+export default function TicketCard({ item }) {
   const navigation = useNavigation(); 
 
 
-
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('OpenMovie', {item:item, fromScreen:'Discover'})}>
+    <TouchableOpacity onPress={() => navigation.navigate('OpenMovie', {item:item, fromScreen:'Ticket'})}>
       <View style={styles.card}>
 
- 
-        <Image style={{ height:height-425, width:width - 205, borderRadius:18  }} source={{ uri: item.image }}/>
-        <View style={styles.rating} >
+    
+        <Image style={{ height:height-480, width:width - 255, borderRadius:18  }} source={{ uri: item.image }}/>
+        {/* <View style={styles.rating} >
           <Text style={{color:'#1A1A1D'}}> IMDB {item.rating}</Text>
-        </View>
-        <View width={width - 210} style={styles.cardText}>
-          <Text numberOfLines={1} style={styles.title}> {item.title} </Text>
-
+        </View> */}
+        <View width={width-170} height={height-480} style={styles.cardText}>
+          <Text numberOfLines={2} style={styles.title}> {item.title} </Text>
+          <Text numberOfLines={7} style={{color:'#ffffff80'}}> {item.description} </Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -31,19 +30,22 @@ export default function Cards({ item }) {
 const styles = StyleSheet.create({
   card:{
     backgroundColor:'#252529',
-    width:width - 175,
-    height:height-345,
-    borderRadius:20,
+    width:width - 15,
+    height:height-450,
+    borderRadius:30,
     justifyContent: 'center',
     alignItems:'center',
-    marginLeft:15
+    display:'flex',
+    flexDirection:'row',
+    marginBottom:15
+
   },
   title:{
     color:'#fff',
     fontWeight:'bold',
     fontSize:15,
     marginBottom:10,
-    marginTop:20
+    marginTop:20,
   },
   description:{
     color:'#fff',
@@ -51,7 +53,10 @@ const styles = StyleSheet.create({
     width:width - 115,
   },
   cardText:{
-    flexDirection:"row"
+    flexDirection:"colimn",
+    marginStart:10,
+    display:'flex',
+    
   },
   rating:{
     shadowColor: "#000",
@@ -74,5 +79,5 @@ const styles = StyleSheet.create({
     alignItems:'center', 
     top:0, 
     borderColor:'#252529', 
-  }
+  },
 })
